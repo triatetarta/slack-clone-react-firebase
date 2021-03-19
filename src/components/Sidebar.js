@@ -9,6 +9,7 @@ import { db } from '../firebase';
 
 const Sidebar = () => {
   const [channels, loading, error] = useCollection(db.collection('rooms'));
+
   return (
     <SidebarContainer>
       <SidebarHeader>
