@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import CreateIcon from '@material-ui/icons/Create';
+import SidebarOption from './SidebarOption';
+import { sidebarOpt } from '../data';
 
 const Sidebar = () => {
   return (
@@ -16,6 +18,10 @@ const Sidebar = () => {
         </SidebarInfo>
         <CreateIcon />
       </SidebarHeader>
+
+      {sidebarOpt.map((option) => {
+        return <SidebarOption key={option.id} {...option} />;
+      })}
     </SidebarContainer>
   );
 };
