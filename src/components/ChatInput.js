@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
-import { db } from '../firebase';
+import { auth, db } from '../firebase';
 import firebase from 'firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-const ChatInput = ({ channelName, channelId }) => {
+const ChatInput = ({ channelName, channelId, chatRef }) => {
   const [input, setInput] = useState('');
+  const [user] = useAuthState(auth);
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -17,9 +19,12 @@ const ChatInput = ({ channelName, channelId }) => {
     db.collection('rooms').doc(channelId).collection('messages').add({
       message: input,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      user: 'Dimitrios Chatziioannou',
-      userImage:
-        'https://scontent-lhr8-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/141145332_444930560201040_3766941303742958626_n.jpg?tp=1&_nc_ht=scontent-lhr8-1.cdninstagram.com&_nc_cat=100&_nc_ohc=HmAw4qY9o4UAX8KqVGs&ccb=7-4&oh=936b9b368aaabcb8222b4cdc9c4c8916&oe=607F25AA&_nc_sid=4f375e',
+      user: user.displayName,
+      userImage: user.photoURL,
+    });
+
+    chatRef.current.scrollIntoView({
+      behavior: 'smooth',
     });
 
     setInput('');
