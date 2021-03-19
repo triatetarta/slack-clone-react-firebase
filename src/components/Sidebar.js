@@ -4,8 +4,11 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import CreateIcon from '@material-ui/icons/Create';
 import SidebarOption from './SidebarOption';
 import { sidebarOpt } from '../data';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { db } from '../firebase';
 
 const Sidebar = () => {
+  const [channels, loading, error] = useCollection(db.collection('rooms'));
   return (
     <SidebarContainer>
       <SidebarHeader>
@@ -21,6 +24,12 @@ const Sidebar = () => {
 
       {sidebarOpt.map((option) => {
         return <SidebarOption key={option.id} {...option} />;
+      })}
+
+      {channels?.docs.map((doc) => {
+        return (
+          <SidebarOption key={doc.id} id={doc.id} title={doc.data().name} />
+        );
       })}
     </SidebarContainer>
   );
